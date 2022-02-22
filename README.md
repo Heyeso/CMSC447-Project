@@ -34,6 +34,10 @@
 
 1. Run server (Run whole application)
    ```sh
+   cd client
+   npm build
+   ```
+   ```sh
    cd server
    venv\Scripts\activate
    python server.py

@@ -2,6 +2,7 @@ export enum COLORS {
   CONFIRM = "#2D9CDB",
   CANCEL = "#EB5757",
   WHITE = "#FFFFFF",
+  GRAY6 = "#F2F2F2",
 }
 
 // Reusable Buttons

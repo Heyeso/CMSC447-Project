@@ -38,6 +38,7 @@ interface Props {
   title: string;
   children: string;
   className?: string;
+  onClick?: () => void;
 }
 const DataCardView = ({ title, children, ...rest }: Props) => {
   return (

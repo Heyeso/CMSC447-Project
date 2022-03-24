@@ -32,6 +32,7 @@ const ButtonContainer = styled.button<ButtonProps>`
 interface Props extends ButtonProps {
   children?: string;
   className?: string;
+  onClick?: () => void;
 }
 const Buttons = ({ children, ...rest }: Props) => {
   return <ButtonContainer {...rest}>{children}</ButtonContainer>;

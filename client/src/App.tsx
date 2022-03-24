@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { COLORS } from "./utils/constants";
 
 const Container = styled.div`
+  position: relative;
   background-color: ${COLORS.GRAY6};
   width: 100%;
   height: 100%;

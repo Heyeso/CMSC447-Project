@@ -1,6 +1,4 @@
 # CMSC447 Project (Crime Data Visualizer)
-
-<!-- GETTING STARTED -->
 ## Getting Started
 
 ### Prerequisites

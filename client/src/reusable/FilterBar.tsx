@@ -13,6 +13,7 @@ const FilterBarContainer = styled.div`
   flex-direction: column;
   width: 300px;
   height: fit-content;
+  margin-bottom: 20px;
 `;
 const Header = styled.h1`
   font-weight: 600;
@@ -67,8 +68,8 @@ const OptionsContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${COLORS.WHITE};
-  box-shadow: rgba(45, 156, 219, 0.02) 0px 1px 3px 0px,
-    rgba(45, 156, 219, 0.149) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  z-index: 100;
 `;
 const Options = styled.span`
   cursor: pointer;

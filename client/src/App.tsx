@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import TopNav from "./components/TopNavigation";
 import { COLORS } from "./utils/constants";
 
 const Container = styled.div`
   position: relative;
-  background-color: ${COLORS.GRAY6};
+  background-color: ${COLORS.WHITE};
   width: 100%;
   height: 100%;
   box-sizing: border-box;
@@ -13,7 +14,17 @@ const Container = styled.div`
 `;
 
 function App() {
-  return <Container className="App"></Container>;
+  const [filterBarOpen, setFilterBarOpen] = useState<boolean>(false);
+
+  return (
+    <Container className="App">
+      <TopNav
+        routes={[]}
+        filterBarOpen={filterBarOpen}
+        setFilterBarOpen={setFilterBarOpen}
+      />
+    </Container>
+  );
 }
 
 export default App;

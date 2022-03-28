@@ -88,11 +88,10 @@ const Routes = styled.span`
 
 interface Props {
   routes: string[];
-  filterBarOpen: boolean;
   setFilterBarOpen: (value: boolean) => void;
 }
 
-function TopNavigation({ routes, filterBarOpen, setFilterBarOpen }: Props) {
+function TopNavigation({ routes, setFilterBarOpen }: Props) {
   return (
     <TopNavigationContainer>
       <TitleContainer>
@@ -111,7 +110,7 @@ function TopNavigation({ routes, filterBarOpen, setFilterBarOpen }: Props) {
       </TitleContainer>
       <MenuIcon
         id="filter-icon"
-        onClick={() => setFilterBarOpen(!filterBarOpen)}
+        onClick={() => setFilterBarOpen(true)}
       />
     </TopNavigationContainer>
   );

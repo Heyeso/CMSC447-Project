@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import FilterData from "./components/FilterData";
 import TopNav from "./components/TopNavigation";
 import { COLORS } from "./utils/constants";
 
@@ -18,11 +19,8 @@ function App() {
 
   return (
     <Container className="App">
-      <TopNav
-        routes={[]}
-        filterBarOpen={filterBarOpen}
-        setFilterBarOpen={setFilterBarOpen}
-      />
+      <TopNav routes={[]} setFilterBarOpen={setFilterBarOpen} />
+      {filterBarOpen && <FilterData setFilterBarOpen={setFilterBarOpen} />}
     </Container>
   );
 }

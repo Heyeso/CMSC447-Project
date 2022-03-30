@@ -1,5 +1,4 @@
 import csv
-from tkinter import N
 from flaskext.mysql import MySQL
 import pymysql
 

@@ -11,6 +11,7 @@ const NullBackground = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.3);
+  z-index: 100;
 `;
 const FilterDataContainer = styled.nav`
   background-color: ${COLORS.WHITE};
@@ -57,7 +58,9 @@ function FilterData({ setFilterBarOpen }: Props) {
             tag={ButtonTags.CONFIRM}
             margin="0px 5px"
             onClick={() => {
-              {/* TODO:Apply and Reset Filters on Apply changes */}
+              {
+                /* TODO:Apply and Reset Filters on Apply changes */
+              }
               setFilterBarOpen(false);
             }}
           >
@@ -67,7 +70,9 @@ function FilterData({ setFilterBarOpen }: Props) {
             tag={ButtonTags.CANCEL}
             margin="0px 5px"
             onClick={() => {
-              {/* TODO:Reset Filters on Cancel */}
+              {
+                /* TODO:Reset Filters on Cancel */
+              }
               setFilterBarOpen(false);
             }}
           >

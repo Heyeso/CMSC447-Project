@@ -4,6 +4,7 @@ import { COLORS } from "../utils/constants";
 import { ReactComponent as MenuIcon } from "./../assets/menu.icon.svg";
 import { ReactComponent as Logo } from "./../assets/logo.icon.svg";
 import { ReactComponent as NextIcon } from "./../assets/next.icon.svg";
+import { Link } from "react-router-dom";
 
 const TopNavigationContainer = styled.nav`
   position: fixed;
@@ -17,6 +18,8 @@ const TopNavigationContainer = styled.nav`
   display: flex;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   align-items: center;
+  z-index: 50;
+
   #filter-icon {
     margin: 0;
     margin-left: auto;
@@ -42,7 +45,7 @@ const TitleContainer = styled.div`
   width: fit-content;
   align-items: center;
 `;
-const Title = styled.h1`
+const Title = styled(Link)`
   margin: 0 10px;
   font-size: 18px;
   font-weight: 600;
@@ -50,6 +53,8 @@ const Title = styled.h1`
   cursor: pointer;
   display: flex;
   align-items: center;
+  text-decoration: none;
+  color: ${COLORS.TEXT1};
   @media (hover: hover) {
     :hover {
       color: ${COLORS.CONFIRM};
@@ -61,7 +66,7 @@ const Title = styled.h1`
     width: 35px;
   }
 `;
-const Routes = styled.span`
+const RouteContainer = styled.span`
   display: flex;
   align-items: center;
   margin: 0 5px;
@@ -87,31 +92,25 @@ const Routes = styled.span`
 `;
 
 interface Props {
-  routes: string[];
+  route: string;
   setFilterBarOpen: (value: boolean) => void;
 }
 
-function TopNavigation({ routes, setFilterBarOpen }: Props) {
+function TopNavigation({ route, setFilterBarOpen }: Props) {
   return (
     <TopNavigationContainer>
       <TitleContainer>
-        <Title>
+        <Title to="/">
           <Logo />
           Baltimore Crime Data
         </Title>
-        {routes.map((element, index) => (
-          <Routes
-            key={index}
-            className={index === routes.length - 1 ? "" : "prev"}
-          >
-            <NextIcon /> {element}
-          </Routes>
-        ))}
+        {route !== "" && (
+          <RouteContainer>
+            <NextIcon /> {route}
+          </RouteContainer>
+        )}
       </TitleContainer>
-      <MenuIcon
-        id="filter-icon"
-        onClick={() => setFilterBarOpen(true)}
-      />
+      <MenuIcon id="filter-icon" onClick={() => setFilterBarOpen(true)} />
     </TopNavigationContainer>
   );
 }

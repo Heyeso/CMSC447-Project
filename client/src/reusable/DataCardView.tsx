@@ -4,9 +4,9 @@ import { COLORS } from "../utils/constants";
 
 const DataCardViewContainer = styled.article`
   cursor: pointer;
-  padding: 10px 20px;
+  padding: 10px 20px 20px;
   font-family: "Montserrat", sans-serif;
-  background-color: ${COLORS.GRAY6};
+  background-color: ${COLORS.WHITE};
   width: 450px;
   height: 350px;
   margin: 15px 20px;
@@ -15,6 +15,7 @@ const DataCardViewContainer = styled.article`
   display: flex;
   flex-direction: column;
   transition: box-shadow 0.3s;
+  border-radius: 0.5px solid ${COLORS.GRAY6};
   @media (hover: hover) {
     :hover {
       box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -29,14 +30,13 @@ const Header = styled.h1`
   padding: 0;
 `;
 const Content = styled.div`
-  margin: 0;
-  margin-top: auto;
+  margin: auto 0;
   padding: 0;
 `;
 
 interface Props {
   title: string;
-  children: string;
+  children: any;
   className?: string;
   onClick?: () => void;
 }

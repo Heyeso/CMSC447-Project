@@ -22,3 +22,15 @@ export const constButtons = {
     backgroundColor: COLORS.CANCEL,
   },
 };
+
+// Reusable Graph
+export enum GraphTags {
+  PIE = "pie",
+  BAR = "bar",
+  LINE = "line",
+}
+
+export interface GraphDM {
+  type: string;
+  value: number;
+}

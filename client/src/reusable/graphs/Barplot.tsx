@@ -1,40 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import { Bar } from '@ant-design/plots';
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import { Bar } from "@ant-design/plots";
+import { GraphDM } from "../../utils/constants";
 
-const DemoBar = () => {
-  const data = [
-    {
-      year: '2017',
-      value: 38,
-    },
-    {
-      year: '2018',
-      value: 52,
-    },
-    {
-      year: '2019',
-      value: 61,
-    },
-    {
-      year: '2020',
-      value: 145,
-    },
-    {
-      year: '2021',
-      value: 48,
-    },
-  ];
+interface Props {
+  data: GraphDM[];
+  barWidthRatio?: number;
+  width?: number;
+  height?: number;
+  color?: string;
+}
+
+const BarPlot = ({ data, barWidthRatio, ...rest }: Props) => {
   const config = {
     data,
-    xField: 'value',
-    yField: 'year',
-    seriesField: 'year',
-    legend: {
-      position: 'top-left',
-    },
+    xField: "value",
+    yField: "type",
+    barWidthRatio: barWidthRatio ? barWidthRatio : 0.4,
   };
-  return <Bar {...config} />;
+  return <Bar {...config} {...rest} />;
 };
 
-export default DemoBar
+export default BarPlot;

@@ -13,8 +13,9 @@ interface Props {
   width?: number;
   height?: number;
   color?: string;
+  showLabel?: boolean;
 }
-const Graphs = ({ data, tag, barWidthRatio,  ...rest }: Props) => {
+const Graphs = ({ data, tag, barWidthRatio, showLabel, ...rest }: Props) => {
   function GetGraph(graph: GraphTags) {
     switch (graph) {
       case GraphTags.PIE:
@@ -22,7 +23,7 @@ const Graphs = ({ data, tag, barWidthRatio,  ...rest }: Props) => {
       case GraphTags.BAR:
         return <BarPlot data={data} barWidthRatio={barWidthRatio} {...rest} />;
       case GraphTags.LINE:
-        return <LinePlot data={data} {...rest} />;
+        return <LinePlot data={data} showLabel={showLabel} {...rest} />;
       default:
         return <div>No Graph</div>;
     }

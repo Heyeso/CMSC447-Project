@@ -1,11 +1,12 @@
 # CMSC447 Project (Crime Data Visualizer)
+
 ## Getting Started
 
 ### Prerequisites
 
-* npm - Download the latest version of Node.js at https://nodejs.org/en/download/
+- npm - Download the latest version of Node.js at https://nodejs.org/en/download/
 
- * python - Douwnload the latest version of python at https://www.python.org/downloads/
+- python - Douwnload the latest version of python at https://www.python.org/downloads/
 
 ### Installation (windows)
 
@@ -19,15 +20,21 @@
    npm i
    ```
 3. Install venv
-    ```sh
-    cd server
-    py -3 -m venv venv
-    ```
-4. Install flask
-    ```sh
-    venv\Scripts\activate
-    pip install Flask
-    ```
+   ```sh
+   cd server
+   py -3 -m venv venv
+   ```
+4. Install flask and other dependencies
+   ```sh
+   venv\Scripts\activate
+   pip install Flask
+   pip install Flask
+   pip install flask_cors
+   pip install pymongo
+   pip install python-dotenv
+   python -m pip install pymongo[srv]
+   ```
+
 ### Run (windows)
 
 1. Run server (Run whole application)

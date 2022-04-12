@@ -9,7 +9,7 @@ CORS(app)
 
 # database
 client = pymongo.MongoClient(os.environ.get("MONGODB_RO_URI"))
-db = client["cmscproj"]
+db = client["cmscproj"] # cmscproj database
 
 # Serve React App
 @app.route("/", methods=["GET"])

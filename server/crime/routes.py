@@ -2,7 +2,7 @@ from bson.json_util import dumps
 from flask import Flask, jsonify, request, redirect
 from app import app, db
 
-collection = db["crime"]
+collection = db["crime"] #crime table
 
 # GET requests
 @app.route("/api/crimes", methods=["GET"])

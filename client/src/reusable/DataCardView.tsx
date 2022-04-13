@@ -3,11 +3,13 @@ import styled from "styled-components";
 import { COLORS } from "../utils/constants";
 
 const DataCardViewContainer = styled.article`
-  cursor: pointer;
+  &.quick-view {
+    cursor: pointer;
+  }
   padding: 10px 20px 20px;
   font-family: "Montserrat", sans-serif;
   background-color: ${COLORS.WHITE};
-  width: 450px;
+  width: 500px;
   height: 350px;
   margin: 15px 20px;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 4px;
@@ -26,7 +28,7 @@ const DataCardViewContainer = styled.article`
 const Header = styled.h1`
   font-weight: 600;
   font-size: 18px;
-  margin: 10px 0;
+  margin: 15px 0 10px;
   padding: 0;
 `;
 const Content = styled.div`

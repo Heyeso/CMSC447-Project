@@ -1,7 +1,9 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import styled from "styled-components";
 import Graphs from "../reusable/Graph";
-import { COLORS, GraphTags } from "../utils/constants";
+import { COLORS, GraphTags, getGraphTag } from "../utils/constants";
+import { QuickViewDM } from "../utils/models";
+import { useNavigate } from "react-router-dom";
 
 const DataCardView = React.lazy(() => import("../reusable/DataCardView"));
 const DataCardsContainer = styled.section`
@@ -12,96 +14,52 @@ const DataCardsContainer = styled.section`
   flex-wrap: wrap;
   justify-content: center;
 `;
-// TODO: Testing Data, to delete
-const data2 = [
-  {
-    type: "121",
-    value: 27,
-  },
-  {
-    type: "122",
-    value: 25,
-  },
-  {
-    type: "123",
-    value: 18,
-  },
-  {
-    type: "124",
-    value: 15,
-  },
-  {
-    type: "125",
-    value: 10,
-  },
-  {
-    type: "126",
-    value: 5,
-  },
-  {
-    type: "127",
-    value: 15,
-  },
-  {
-    type: "128",
-    value: 10,
-  },
-  {
-    type: "129",
-    value: 5,
-  },
-];
 interface Props {
   setCurrentRoute: (value: string) => void;
+  setRouteData: (value: QuickViewDM) => void;
 }
-function Main({ setCurrentRoute }: Props) {
+function Main({ setCurrentRoute, setRouteData }: Props) {
+  const [data, setData] = useState<QuickViewDM[] | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/crimes/statistics")
+      .then((response) => response.json())
+      .then((res_data) => {
+        console.log(res_data);
+        return setData(res_data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <>
       {/* TODO: Map Goes here */}
       <DataCardsContainer>
-        {/* TODO: Testing Data Cards, to delete */}
-        <Suspense fallback={<div>loading</div>}>
-          <DataCardView
-            title="Test Card"
-            onClick={() => {
-              setCurrentRoute("Test Card");
-            }}
-          >
-            <Graphs
-              data={data2}
-              tag={GraphTags.LINE}
-              height={280}
-              width={280}
-              color={COLORS.CONFIRM}
-            />
-          </DataCardView>
-        </Suspense>
-        <Suspense fallback={<div>loading</div>}>
-          <DataCardView
-            title="Test Card1"
-            onClick={() => {
-              setCurrentRoute("Test Card");
-            }}
-          >
-            <Graphs
-              data={data2}
-              tag={GraphTags.BAR}
-              height={280}
-              width={280}
-              color={COLORS.CONFIRM}
-            />
-          </DataCardView>
-        </Suspense>
-        <Suspense fallback={<div>loading</div>}>
-          <DataCardView
-            title="Test Card2"
-            onClick={() => {
-              setCurrentRoute("Test Card");
-            }}
-          >
-            <Graphs data={data2} tag={GraphTags.PIE} height={280} width={280} />
-          </DataCardView>
-        </Suspense>
+        {data &&
+          data.map((element, index) => (
+            <Suspense fallback={<div>loading</div>} key={index}>
+              <DataCardView
+                key={index}
+                title={element.title}
+                onClick={() => {
+                  setCurrentRoute(element.title);
+                  setRouteData(element);
+                  navigate(`/statistic/${encodeURIComponent(element.title)}`);
+                }}
+                className="quick-view"
+              >
+                <Graphs
+                  data={element.data}
+                  tag={getGraphTag(element.tag)}
+                  showLabel={true}
+                  height={280}
+                  width={280}
+                  color={COLORS.CONFIRM}
+                />
+              </DataCardView>
+            </Suspense>
+          ))}
       </DataCardsContainer>
     </>
   );

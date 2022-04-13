@@ -17,10 +17,13 @@ def crimes_statistics():
 # Calculates the crime statistic for weapons distribution, from the database
 @app.route("/api/crimes/statistics/weapons", methods=["GET"])
 def weapons_distribution():
-    weapons = crime_collection.distinct("Weapon")
     data = []
-    for type in weapons:
-        number_of_crimes = crime_collection.count_documents({"Weapon": type})
-        data.append({"type": type, "value": number_of_crimes})
+    cursor = crime_collection.aggregate(
+        [{"$group": {"_id": {"Weapon": "$Weapon"}, "count": {"$sum": 1}}}]
+    )
+
+    for type in list(cursor):
+        if type["_id"]["Weapon"] != "" and type["_id"]["Weapon"] != "NA":
+            data.append({"type": type["_id"]["Weapon"], "value": type["count"]})
 
     return {"tag": "bar", "title": "Weapons Distribution", "data": data}, 200

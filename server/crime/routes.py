@@ -22,8 +22,13 @@ def weapons_distribution():
         [{"$group": {"_id": {"Weapon": "$Weapon"}, "count": {"$sum": 1}}}]
     )
 
-    for type in list(cursor):
-        if type["_id"]["Weapon"] != "" and type["_id"]["Weapon"] != "NA":
-            data.append({"type": type["_id"]["Weapon"], "value": type["count"]})
+    for weapon in list(cursor):
+        if weapon["_id"]["Weapon"] != "" and weapon["_id"]["Weapon"] != "NA":
+            data.append(
+                {
+                    "type": weapon["_id"]["Weapon"].replace("_", " ").title(),
+                    "value": weapon["count"],
+                }
+            )
 
     return {"tag": "bar", "title": "Weapons Distribution", "data": data}, 200

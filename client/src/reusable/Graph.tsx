@@ -13,14 +13,18 @@ interface Props {
   width?: number;
   height?: number;
   color?: string;
+  showLabel?: boolean;
+  seriesField?: string;
+  autoFit?: boolean;
+  marginRatio?: number;
 }
-const Graphs = ({ data, tag, barWidthRatio,  ...rest }: Props) => {
+const Graphs = ({ data, tag, barWidthRatio, showLabel, seriesField, ...rest }: Props) => {
   function GetGraph(graph: GraphTags) {
     switch (graph) {
       case GraphTags.PIE:
         return <PieChart data={data} {...rest} />;
       case GraphTags.BAR:
-        return <BarPlot data={data} barWidthRatio={barWidthRatio} {...rest} />;
+        return <BarPlot data={data} barWidthRatio={barWidthRatio} seriesField={seriesField} {...rest} />;
       case GraphTags.LINE:
         return <LinePlot data={data} {...rest} />;
       default:

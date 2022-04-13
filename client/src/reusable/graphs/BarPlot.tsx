@@ -8,6 +8,8 @@ interface Props {
   width?: number;
   height?: number;
   color?: string;
+  seriesField?: string;
+  autoFit?: boolean;
 }
 
 const BarPlot = ({ data, barWidthRatio, ...rest }: Props) => {

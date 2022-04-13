@@ -7,6 +7,8 @@ interface Props {
   width?: number;
   height?: number;
   color?: string;
+  showLabel?: boolean;
+  autoFit?: boolean;
 }
 
 const LinePlot = ({ data, ...rest }: Props) => {

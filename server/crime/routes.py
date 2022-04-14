@@ -3,6 +3,8 @@ from bson.json_util import dumps
 from flask import Flask, jsonify, request, redirect
 from app import app, db
 
+WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
 crime_collection = db["crime"]  # crime table
 crime_statistics_collection = db["crime_statistics"]  # crime statistics table
 
@@ -13,46 +15,10 @@ def crimes_statistics():
     cursor = crime_statistics_collection.find({}, {"_id": False})
     return jsonify(list(cursor)), 200
 
-
-# Calculates the crime statistic for weapons distribution, from the database
-#@app.route("/api/crimes/statistics/weapons", methods=["GET"])
-def weapons_distribution():
-    data = []
-    cursor = crime_collection.aggregate(
-        [{"$group": {"_id": {"Weapon": "$Weapon"}, "count": {"$sum": 1}}}]
-    )
-
-    for weapon in list(cursor):
-        if weapon["_id"]["Weapon"] != "" and weapon["_id"]["Weapon"] != "NA":
-            data.append(
-                {
-                    "type": weapon["_id"]["Weapon"].replace("_", " ").title(),
-                    "value": weapon["count"],
-                }
-            )
-    return {"tag": "bar", "title": "Weapons Distribution", "data": data}, 200
-
-# Calculates the crime statistic for months distribution, from the database
-#@app.route("/api/crimes/statistics/weekdays", methods=["GET"])
-def weekdays_distribution():
-    data = []
-    cursor = crime_collection.aggregate(
-        [{'$project': {"weekdays": {"$dayOfWeek": "$CrimeDateTime"}}},
-        {'$group': {"_id": {"weekday": "$weekdays"}, "count": {'$sum': 1}}}]
-    )
-    for weekday in list(cursor):
-        data.append(
-            {
-                "type": str(weekday["_id"]["weekday"]).title(),
-                "value": weekday["count"],
-            }
-        )
-    return {"tag": "bar", "title": "Weekdays Distribution", "data": data}, 200
-
-# Calculates the crime statistic for months distribution, from the database
+# Calculates the crime statistic for all distributions from the database
 @app.route("/api/crimes/statistics/<selection>", methods=["GET"])
 def distribution(selection):
-    # data will dictionaries for each data entry
+    # data will hold dictionaries for each data entry
     data = []
     # command will hold the query
     command = []
@@ -72,9 +38,17 @@ def distribution(selection):
     cursor = crime_collection.aggregate(command)
     
     # Go through documents
-    for document in list(cursor):
-        item = str(document["_id"][point])
-        if item != "" and item != "NA":
+    all_docs = sorted(list(cursor), key = lambda i:i['_id'][point])
+    item = ""
+    for document in all_docs:
+        # Need to convert nums to weekdays if this is the selection
+        if selection == 'weekdays':
+            item = WEEKDAYS[document["_id"][point] - 1]
+        else:
+            item = str(document["_id"][point])
+    
+        # Check for valid data
+        if (item != "") and (item != "NA"):
             data.append(
                 {
                     "type": item.replace("_", " ").title(),

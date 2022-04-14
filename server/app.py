@@ -3,12 +3,14 @@ from flask_cors import CORS
 from flask.helpers import send_from_directory
 import pymongo
 import os
+import certifi
 
 app = Flask(__name__, static_folder="../client/build", static_url_path="")
 CORS(app)
 
 # database
-client = pymongo.MongoClient(os.environ.get("MONGODB_RO_URI"))
+ca = certifi.where()
+client = pymongo.MongoClient(os.environ.get("MONGODB_RO_URI"), tlsCAFile=ca)
 db = client["cmscproj"] # cmscproj database
 
 # Serve React App

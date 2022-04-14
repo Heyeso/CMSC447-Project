@@ -28,7 +28,7 @@
    ```sh
    venv\Scripts\activate
    pip install Flask
-   pip install Flask
+   pip install certifi
    pip install flask_cors
    pip install pymongo
    pip install python-dotenv
@@ -45,10 +45,26 @@
    ```sh
    cd server
    venv\Scripts\activate
-   python server.py
+   python app.py
    ```
 2. Run client (only)
    ```sh
    cd client
    npm start
+   ```
+3. Run BE (only)
+   ```sh
+   cd server
+   venv\Scripts\activate
+   python app.py
+   ```
+   ```sh
+   cd server
+   venv\Scripts\activate
+   python3 app.py
+   ```
+   ```sh
+   cd server
+   venv\Scripts\activate
+   flask run
    ```

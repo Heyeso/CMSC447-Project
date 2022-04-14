@@ -30,5 +30,22 @@ def weapons_distribution():
                     "value": weapon["count"],
                 }
             )
-
     return {"tag": "bar", "title": "Weapons Distribution", "data": data}, 200
+
+# Calculates the crime statistic for months distribution, from the database
+@app.route("/api/crimes/statistics/weekdays", methods=["GET"])
+def weekdays_distribution():
+    data = []
+    cursor = crime_collection.aggregate(
+        [{'$project': {"weekdays": {"$dayOfWeek": "$CrimeDateTime"}}},
+        {'$group': {"_id": {"weekdays": "$weekdays"}, "count": {'$sum': 1}}}]
+    )
+    print(list(cursor))
+    for weekday in list(cursor):
+        data.append(
+            {
+                "type": weekday["_id"]["weekdays"].title(),
+                "value": weekday["count"],
+            }
+        )
+    return {"tag": "bar", "title": "Weekdays Distribution", "data": data}, 200

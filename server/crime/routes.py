@@ -15,7 +15,7 @@ def crimes_statistics():
 
 
 # Calculates the crime statistic for weapons distribution, from the database
-@app.route("/api/crimes/statistics/weapons", methods=["GET"])
+#@app.route("/api/crimes/statistics/weapons", methods=["GET"])
 def weapons_distribution():
     data = []
     cursor = crime_collection.aggregate(
@@ -33,19 +33,53 @@ def weapons_distribution():
     return {"tag": "bar", "title": "Weapons Distribution", "data": data}, 200
 
 # Calculates the crime statistic for months distribution, from the database
-@app.route("/api/crimes/statistics/weekdays", methods=["GET"])
+#@app.route("/api/crimes/statistics/weekdays", methods=["GET"])
 def weekdays_distribution():
     data = []
     cursor = crime_collection.aggregate(
         [{'$project': {"weekdays": {"$dayOfWeek": "$CrimeDateTime"}}},
-        {'$group': {"_id": {"weekdays": "$weekdays"}, "count": {'$sum': 1}}}]
+        {'$group': {"_id": {"weekday": "$weekdays"}, "count": {'$sum': 1}}}]
     )
-    print(list(cursor))
     for weekday in list(cursor):
         data.append(
             {
-                "type": weekday["_id"]["weekdays"].title(),
+                "type": str(weekday["_id"]["weekday"]).title(),
                 "value": weekday["count"],
             }
         )
     return {"tag": "bar", "title": "Weekdays Distribution", "data": data}, 200
+
+# Calculates the crime statistic for months distribution, from the database
+@app.route("/api/crimes/statistics/<selection>", methods=["GET"])
+def distribution(selection):
+    # data will dictionaries for each data entry
+    data = []
+    # command will hold the query
+    command = []
+    # point will hold the _id call
+    point = ""
+
+    # Based on what distribution is put in the route
+    if selection == 'weapons':
+        command = [{"$group": {"_id": {"Weapon": "$Weapon"}, "count": {"$sum": 1}}}]
+        point = 'Weapon'
+    elif selection == 'weekdays':
+        command = [{'$project': {"weekdays": {"$dayOfWeek": "$CrimeDateTime"}}},
+                   {'$group': {"_id": {"Weekday": "$weekdays"}, "count": {'$sum': 1}}}]
+        point = 'Weekday'
+
+    # Aggregate the command
+    cursor = crime_collection.aggregate(command)
+    
+    # Go through documents
+    for document in list(cursor):
+        item = str(document["_id"][point])
+        if item != "" and item != "NA":
+            data.append(
+                {
+                    "type": item.replace("_", " ").title(),
+                    "value": document["count"],
+                }
+            )
+
+    return {"tag": "bar", "title": point +  " Distribution", "data": data}, 200

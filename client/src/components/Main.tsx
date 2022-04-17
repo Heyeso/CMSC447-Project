@@ -3,6 +3,9 @@ import styled from "styled-components";
 import Graphs from "../reusable/Graph";
 import { COLORS, GraphTags } from "../utils/constants";
 
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css';
+
 const DataCardView = React.lazy(() => import("../reusable/DataCardView"));
 const DataCardsContainer = styled.section`
   width: 100%;
@@ -58,6 +61,19 @@ function Main({ setCurrentRoute }: Props) {
   return (
     <>
       {/* TODO: Map Goes here */}
+
+      <MapContainer center={[39.29, -76.61]} zoom={13} height={180} >
+        <TileLayer
+          //attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={[51.505, -0.09]}>
+          <Popup>
+            A pretty CSS3 popup. <br /> Easily customizable.
+          </Popup>
+        </Marker>
+      </MapContainer>
+
       <DataCardsContainer>
         {/* TODO: Testing Data Cards, to delete */}
         <Suspense fallback={<div>loading</div>}>
@@ -76,6 +92,16 @@ function Main({ setCurrentRoute }: Props) {
             />
           </DataCardView>
         </Suspense>
+        {/* <Suspense fallback={<div>loading</div>}>
+          <DataCardView
+            title="Test Map"
+            onClick={() => {
+              setCurrentRoute("Test Map");
+            }}
+          >
+            
+          </DataCardView>
+        </Suspense> */}
         <Suspense fallback={<div>loading</div>}>
           <DataCardView
             title="Test Card1"

@@ -73,10 +73,6 @@ function App() {
             path={`/statistic/${encodeURIComponent(currentRoute)}`}
             element={<StatisticPage data={routeData} />}
           />
-          <Route
-            path={"/statistic/Weapons%20Distribution"}
-            element={<StatisticPage data={routeData} />}
-          />
         </Routes>
       </MainPageContainer>
     </Container>

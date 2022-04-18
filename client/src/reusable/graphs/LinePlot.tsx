@@ -7,10 +7,10 @@ interface Props {
   width?: number;
   height?: number;
   color?: string;
-  showLabel?: boolean;
+  autoFit?: boolean;
 }
 
-const LinePlot = ({ data, showLabel, ...rest }: Props) => {
+const LinePlot = ({ data, ...rest }: Props) => {
   const config = {
     data,
     xField: "type",
@@ -25,12 +25,9 @@ const LinePlot = ({ data, showLabel, ...rest }: Props) => {
       },
     },
     xAxis: {
-      label:
-        showLabel && data.length < 20
-          ? {
-              rotate: data.length > 5 ? 0.5 : 0,
-            }
-          : null,
+      label: {
+        rotate: data.length > 5 ? 0.5 : 0,
+      },
     },
   };
 

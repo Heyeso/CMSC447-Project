@@ -5,6 +5,7 @@ import { ReactComponent as MenuIcon } from "./../assets/menu.icon.svg";
 import { ReactComponent as Logo } from "./../assets/logo.icon.svg";
 import { ReactComponent as NextIcon } from "./../assets/next.icon.svg";
 import { Link } from "react-router-dom";
+import { QuickViewDM } from "../utils/models";
 
 const TopNavigationContainer = styled.nav`
   position: fixed;
@@ -94,13 +95,26 @@ const RouteContainer = styled.span`
 interface Props {
   route: string;
   setFilterBarOpen: (value: boolean) => void;
+  setCurrentRoute: (value: string) => void;
+  setRouteData: (value: QuickViewDM | null) => void;
 }
 
-function TopNavigation({ route, setFilterBarOpen }: Props) {
+function TopNavigation({
+  route,
+  setFilterBarOpen,
+  setCurrentRoute,
+  setRouteData,
+}: Props) {
   return (
     <TopNavigationContainer>
       <TitleContainer>
-        <Title to="/">
+        <Title
+          to="/"
+          onClick={() => {
+            setCurrentRoute("");
+            setRouteData(null);
+          }}
+        >
           <Logo />
           Baltimore Crime Data
         </Title>
@@ -110,7 +124,9 @@ function TopNavigation({ route, setFilterBarOpen }: Props) {
           </RouteContainer>
         )}
       </TitleContainer>
-      <MenuIcon id="filter-icon" onClick={() => setFilterBarOpen(true)} />
+      {route === "" && (
+        <MenuIcon id="filter-icon" onClick={() => setFilterBarOpen(true)} />
+      )}
     </TopNavigationContainer>
   );
 }

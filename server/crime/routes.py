@@ -1,11 +1,12 @@
 from json import loads
 from bson.json_util import dumps
-from flask import Flask, jsonify, request, redirect
+from flask import Flask, abort, jsonify, render_template, request, redirect
 from app import app, db
 
 WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 CHARTS = ['bar', 'pie', 'line']
+SELECTIONS = ['weapons', 'weekdays', 'hours', 'dates', 'descriptions', 'districts', 'months']
 
 # crime ad crime stats tables
 crime_collection = db["crime"]
@@ -31,7 +32,10 @@ def distribution(selection, tag):
 
     # Bad tags - should throw an error, bar for now
     if tag not in CHARTS:
-        tag = CHARTS[0]
+        abort(404)
+    # Bad selections - should throw an error, weapons for now
+    if selection not in SELECTIONS:
+        abort(404)
 
     # Based on what distribution is put in the route
     if selection == 'weapons':

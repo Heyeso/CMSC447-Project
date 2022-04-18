@@ -7,9 +7,10 @@ interface Props {
   width?: number;
   height?: number;
   color?: string;
+  showLabel?: boolean;
 }
 
-const LinePlot = ({ data, ...rest }: Props) => {
+const LinePlot = ({ data, showLabel, ...rest }: Props) => {
   const config = {
     data,
     xField: "type",
@@ -22,6 +23,14 @@ const LinePlot = ({ data, ...rest }: Props) => {
         stroke: COLORS.CONFIRM,
         lineWidth: 2,
       },
+    },
+    xAxis: {
+      label:
+        showLabel && data.length < 20
+          ? {
+              rotate: data.length > 5 ? 0.5 : 0,
+            }
+          : null,
     },
   };
 

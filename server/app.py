@@ -11,7 +11,7 @@ CORS(app)
 # database
 ca = certifi.where()
 client = pymongo.MongoClient(os.environ.get("MONGODB_RO_URI"), tlsCAFile=ca)
-db = client["cmscproj"] # cmscproj database
+db = client["cmscproj"]  # cmscproj database
 
 # Serve React App
 @app.route("/", methods=["GET"])
@@ -19,10 +19,9 @@ def serve():
     return send_from_directory(app.static_folder, "index.html")
 
 
-# Test API route
-@app.route("/api/test")
-def test():
-    return {"msg": "Test is working as expected", "status": 200}, 200
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file("index.html")
 
 
 # routes

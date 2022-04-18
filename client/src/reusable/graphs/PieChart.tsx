@@ -7,6 +7,7 @@ interface Props {
   width?: number;
   height?: number;
   color?: string;
+  autoFit?: boolean;
 }
 const PieChart = ({ data, ...rest }: Props) => {
   const config = {

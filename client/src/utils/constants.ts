@@ -34,3 +34,32 @@ export interface GraphDM {
   type: string;
   value: number;
 }
+
+export function getGraphTag(tag: string) {
+  switch (tag) {
+    case "pie":
+      return GraphTags.PIE;
+    case "bar":
+      return GraphTags.BAR;
+    case "line":
+      return GraphTags.LINE;
+    default:
+      return GraphTags.PIE;
+  }
+}
+
+export function getEndpoint(url: string) {
+  if (url.includes("Weapons%20Distribution"))
+    return "/api/crimes/statistics/weapons";
+  if (url.includes("Weekday%20Distribution"))
+    return "/api/crimes/statistics/weekdays";
+  if (url.includes("Hour%20Distribution"))
+    return "/api/crimes/statistics/hours/line";
+  if (url.includes("Description%20Distribution"))
+    return "/api/crimes/statistics/descriptions";
+  if (url.includes("District%20Distribution"))
+    return "/api/crimes/statistics/districts";
+  if (url.includes("Month%20Distribution"))
+    return "/api/crimes/statistics/months/pie";
+  return "";
+}

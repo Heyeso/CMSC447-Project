@@ -14,7 +14,7 @@ TITLES = {'weapons': 'Weapon', 'weekdays': 'Weekday', 'hours': 'Hour', 'dates': 
 GROUPS = {'weapons': 'Weapon', 'weekdays': 'weekdays', 'hours': 'hours', 'dates': 'dates', 'descriptions': 'Description', 'districts': 'District', 'months': 'months', 'years': 'years'}
 PROJECTIONS = {'weekdays': 'dayOfWeek', 'hours': 'hour', 'dates': 'dateToString', 'months': 'month', 'years': 'year'}
 
-# crime ad crime stats tables
+# crime and crime stats tables
 crime_collection = db["crime"]
 crime_statistics_collection = db["crime_statistics"]
 

@@ -6,7 +6,7 @@ from app import app, db
 WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 CHARTS = ['bar', 'pie', 'line']
-SELECTIONS = ['weapons', 'weekdays', 'hours', 'dates', 'descriptions', 'districts', 'months']
+SELECTIONS = ['weapons', 'weekdays', 'hours', 'dates', 'descriptions', 'districts', 'months', 'years']
 
 # crime ad crime stats tables
 crime_collection = db["crime"]
@@ -63,6 +63,11 @@ def distribution(selection, tag):
         command = [{'$project': {"months": {"$month": "$CrimeDateTime"}}},
                    {'$group': {"_id": {"Month": "$months"}, "count": {'$sum': 1}}}]
         point = 'Month'
+    elif selection == 'years':
+        command = [{'$project': {"years": {"$year": "$CrimeDateTime"}}},
+                   {'$group': {"_id": {"Year": "$years"}, "count": {'$sum': 1}}}]
+        point = 'Year'
+
 
     # Aggregate the command
     cursor = crime_collection.aggregate(command)

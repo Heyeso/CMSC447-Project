@@ -3,10 +3,16 @@ from bson.json_util import dumps
 from flask import Flask, abort, jsonify, render_template, request, redirect
 from app import app, db
 
+# Constants
 WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 CHARTS = ['bar', 'pie', 'line']
+# Valid selections
 SELECTIONS = ['weapons', 'weekdays', 'hours', 'dates', 'descriptions', 'districts', 'months', 'years']
+# Titles and parts of relevant commands
+TITLES = {'weapons': 'Weapon', 'weekdays': 'Weekday', 'hours': 'Hour', 'dates': 'Date', 'descriptions': 'Description', 'districts': 'District', 'months': 'Month', 'years': 'Year'}
+GROUPS = {'weapons': 'Weapon', 'weekdays': 'weekdays', 'hours': 'hours', 'dates': 'dates', 'descriptions': 'Description', 'districts': 'District', 'months': 'months', 'years': 'years'}
+PROJECTIONS = {'weekdays': 'dayOfWeek', 'hours': 'hour', 'dates': 'dateToString', 'months': 'month', 'years': 'year'}
 
 # crime ad crime stats tables
 crime_collection = db["crime"]
@@ -37,36 +43,16 @@ def distribution(selection, tag):
     if selection not in SELECTIONS:
         abort(404)
 
-    # Based on what distribution is put in the route
-    if selection == 'weapons':
-        command = [{"$group": {"_id": {"Weapon": "$Weapon"}, "count": {"$sum": 1}}}]
-        point = 'Weapon'
-    elif selection == 'weekdays':
-        command = [{'$project': {"weekdays": {"$dayOfWeek": "$CrimeDateTime"}}},
-                   {'$group': {"_id": {"Weekday": "$weekdays"}, "count": {'$sum': 1}}}]
-        point = 'Weekday'
-    elif selection == 'hours':
-        command = [{'$project': {"hours": {"$hour": "$CrimeDateTime"}}},
-                   {'$group': {"_id": {"Hour": "$hours"}, "count": {'$sum': 1}}}]
-        point = 'Hour'
+    # Create commands and title point
+    if selection in PROJECTIONS.keys() and selection != 'dates':
+        command = [{'$project': {selection: {"$" + PROJECTIONS[selection]: "$CrimeDateTime"}}},
+                   {'$group': {"_id": {TITLES[selection]: "$" + GROUPS[selection]}, "count": {'$sum': 1}}}]
     elif selection == 'dates':
         command = [{'$project': {"dates": {"$dateToString": {"format": "%Y-%m-%d", "date": "$CrimeDateTime"}}}},
                    {"$group": {"_id": {"Date": "$dates"}, "count": {"$sum": 1}}}]
-        point = 'Date'
-    elif selection == 'descriptions':
-        command = [{"$group": {"_id": {"Description": "$Description"}, "count": {"$sum": 1}}}]
-        point = 'Description'
-    elif selection == 'districts':
-        command = [{"$group": {"_id": {"District": "$District"}, "count": {"$sum": 1}}}]
-        point = 'District'
-    elif selection == 'months':
-        command = [{'$project': {"months": {"$month": "$CrimeDateTime"}}},
-                   {'$group': {"_id": {"Month": "$months"}, "count": {'$sum': 1}}}]
-        point = 'Month'
-    elif selection == 'years':
-        command = [{'$project': {"years": {"$year": "$CrimeDateTime"}}},
-                   {'$group': {"_id": {"Year": "$years"}, "count": {'$sum': 1}}}]
-        point = 'Year'
+    else:
+        command = [{"$group": {"_id": {TITLES[selection]: "$" + GROUPS[selection]}, "count": {"$sum": 1}}}]
+    point = TITLES[selection]
 
 
     # Aggregate the command

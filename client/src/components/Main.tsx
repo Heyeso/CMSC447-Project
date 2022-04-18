@@ -44,13 +44,11 @@ function Main({ setCurrentRoute, setRouteData }: Props) {
         <TileLayer
           url='https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=RfEVsKGPWIYyqvgh3ZtV'
         />
-        <Marker position={[39.29, -76.61]}>
+        {/* <Marker position={[39.29, -76.61]}>
           <Popup>
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>
-        </Marker>
-        <Marker position={[39.19, -76.61]}>
-        </Marker>
+        </Marker> */}
       </MapContainer>
 
       <DataCardsContainer>

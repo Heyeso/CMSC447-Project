@@ -52,10 +52,8 @@ function Main({ setCurrentRoute, setRouteData }: Props) {
                 <Graphs
                   data={element.data}
                   tag={getGraphTag(element.tag)}
-                  showLabel={true}
                   height={280}
                   width={280}
-                  color={COLORS.CONFIRM}
                 />
               </DataCardView>
             </Suspense>

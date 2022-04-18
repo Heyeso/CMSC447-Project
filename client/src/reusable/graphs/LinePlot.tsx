@@ -7,7 +7,6 @@ interface Props {
   width?: number;
   height?: number;
   color?: string;
-  showLabel?: boolean;
   autoFit?: boolean;
 }
 
@@ -23,6 +22,11 @@ const LinePlot = ({ data, ...rest }: Props) => {
         fill: "white",
         stroke: COLORS.CONFIRM,
         lineWidth: 2,
+      },
+    },
+    xAxis: {
+      label: {
+        rotate: data.length > 5 ? 0.5 : 0,
       },
     },
   };

@@ -13,12 +13,11 @@ interface Props {
   width?: number;
   height?: number;
   color?: string;
-  showLabel?: boolean;
   seriesField?: string;
   autoFit?: boolean;
   marginRatio?: number;
 }
-const Graphs = ({ data, tag, barWidthRatio, showLabel, seriesField, ...rest }: Props) => {
+const Graphs = ({ data, tag, barWidthRatio, seriesField, ...rest }: Props) => {
   function GetGraph(graph: GraphTags) {
     switch (graph) {
       case GraphTags.PIE:

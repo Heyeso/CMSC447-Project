@@ -31,7 +31,6 @@ function StatisticPage({ data }: Props) {
             <Graphs
               data={data.data}
               tag={getGraphTag(data.tag)}
-              showLabel={true}
               height={600}
               seriesField={"type"}
               barWidthRatio={0.6}

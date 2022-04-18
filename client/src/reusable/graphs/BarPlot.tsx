@@ -17,6 +17,7 @@ const BarPlot = ({ data, barWidthRatio, ...rest }: Props) => {
     data,
     xField: "value",
     yField: "type",
+    seriesField: "type",
     barWidthRatio: barWidthRatio ? barWidthRatio : 0.4,
   };
   return <Bar {...config} {...rest} />;

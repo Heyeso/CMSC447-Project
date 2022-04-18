@@ -58,11 +58,13 @@
    venv\Scripts\activate
    python app.py
    ```
+   or
    ```sh
    cd server
    venv\Scripts\activate
    python3 app.py
    ```
+   or
    ```sh
    cd server
    venv\Scripts\activate

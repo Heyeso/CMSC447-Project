@@ -18,6 +18,7 @@ db = client["cmscproj"] # cmscproj database
 def serve():
     return send_from_directory(app.static_folder, "index.html")
 
+
 # Test API route
 @app.route("/api/test")
 def test():

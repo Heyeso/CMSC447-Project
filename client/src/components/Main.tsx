@@ -4,8 +4,7 @@ import Graphs from "../reusable/Graph";
 import { COLORS, GraphTags } from "../utils/constants";
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import 'leaflet/dist/leaflet.css';
-import "./map.css"
+import "./map.css";
 
 const DataCardView = React.lazy(() => import("../reusable/DataCardView"));
 const DataCardsContainer = styled.section`
@@ -374,13 +373,14 @@ function Main({ setCurrentRoute }: Props) {
       {/* Not pretty, but gets the job done */}
       <MapContainer center={[39.29, -76.61]} zoom={13} height={300} >
         <TileLayer
-          //attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url='https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=RfEVsKGPWIYyqvgh3ZtV'
         />
         <Marker position={[39.29, -76.61]}>
           <Popup>
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>
+        </Marker>
+        <Marker position={[39.19, -76.61]}>
         </Marker>
       </MapContainer>
 

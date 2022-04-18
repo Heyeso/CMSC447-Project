@@ -36,10 +36,10 @@ def distribution(selection, tag):
     # point will hold the _id call
     point = ""
 
-    # Bad tags - should throw an error, bar for now
+    # Bad tags - should throw a 404
     if tag not in CHARTS:
         abort(404)
-    # Bad selections - should throw an error, weapons for now
+    # Bad selections - should throw a 404
     if selection not in SELECTIONS:
         abort(404)
 

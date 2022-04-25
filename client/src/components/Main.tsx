@@ -4,11 +4,11 @@ import Graphs from "../reusable/Graph";
 import { COLORS, GraphTags, getGraphTag } from "../utils/constants";
 import { QuickViewDM } from "../utils/models";
 import { useNavigate } from "react-router-dom";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import "./map.css";
 
 const DataCardView = React.lazy(() => import("../reusable/DataCardView"));
+
 const DataCardsContainer = styled.section`
   width: 100%;
   height: fit-content;
@@ -16,6 +16,10 @@ const DataCardsContainer = styled.section`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+`;
+const MapContainerJ = styled(MapContainer)`
+  width: 100%;
+  height: 700px;
 `;
 interface Props {
   setCurrentRoute: (value: string) => void;
@@ -37,19 +41,13 @@ function Main({ setCurrentRoute, setRouteData }: Props) {
 
   return (
     <>
-      {/* TODO: Map Goes here */}
-
       {/* Not pretty, but gets the job done */}
-      <MapContainer center={[39.29, -76.61]} zoom={13} height={300} >
-        <TileLayer
-          url='https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=RfEVsKGPWIYyqvgh3ZtV'
-        />
-        {/* <Marker position={[39.29, -76.61]}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker> */}
-      </MapContainer>
+      <MapContainerJ center={[39.29, -76.61]} zoom={13} id="map">
+        <TileLayer url="https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=RfEVsKGPWIYyqvgh3ZtV" />
+        <Marker position={[39.29, -76.61]}>
+          <Popup>Sample Marker</Popup>
+        </Marker>
+      </MapContainerJ>
 
       <DataCardsContainer>
         {data &&

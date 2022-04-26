@@ -19,9 +19,10 @@ const TopNavigationContainer = styled.nav`
   align-items: center;
   z-index: 2000;
   transition: max-height 0.3s ease-out;
+  color: ${COLORS.BLACK};
 
   &.not-top {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(250, 250, 250, 0.7);
     backdrop-filter: blur(3px);
     max-height: 70px;
     transition: max-height 0.3s ease-out;

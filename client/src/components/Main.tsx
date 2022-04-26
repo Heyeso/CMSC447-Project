@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect, useState } from "react";
 import styled from "styled-components";
 import Graphs from "../reusable/Graph";
-import { COLORS, GraphTags, getGraphTag } from "../utils/constants";
+import { COLORS, GraphTags, getGraphTag, getCardTitle } from "../utils/constants";
 import { QuickViewDM } from "../utils/models";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -55,7 +55,7 @@ function Main({ setCurrentRoute, setRouteData }: Props) {
             <Suspense fallback={<div>loading</div>} key={index}>
               <DataCardView
                 key={index}
-                title={element.title}
+                title={getCardTitle(element.title)}
                 onClick={() => {
                   setCurrentRoute(element.title);
                   setRouteData(element);
@@ -66,8 +66,9 @@ function Main({ setCurrentRoute, setRouteData }: Props) {
                 <Graphs
                   data={element.data}
                   tag={getGraphTag(element.tag)}
-                  height={280}
-                  width={280}
+                  height={300}
+                  width={300}
+                  color={COLORS.CONFIRM}
                 />
               </DataCardView>
             </Suspense>

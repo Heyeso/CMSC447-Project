@@ -10,7 +10,7 @@ import { QuickViewDM } from "./utils/models";
 
 const Container = styled.div`
   position: relative;
-  background-color: ${COLORS.WHITE};
+  background-color: ${COLORS.BACKGROUND};
   width: 100%;
   height: 100%;
   box-sizing: border-box;

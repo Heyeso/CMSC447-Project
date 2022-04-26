@@ -20,7 +20,7 @@ const Header = styled.h1`
   font-size: 16px;
   margin: 0 0 7px 0;
   padding: 0;
-  color: ${COLORS.TEXT1};
+  color: ${COLORS.BLACK};
   width: 100%;
 `;
 const SelectContainer = styled.div`

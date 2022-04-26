@@ -45,6 +45,7 @@
    ```sh
    cd server
    venv\Scripts\activate
+   (or source venv/bin/activate    -- Stephen)
    python app.py
    ```
 2. Run client (only)

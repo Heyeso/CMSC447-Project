@@ -19,7 +19,7 @@ const TopNavigationContainer = styled.nav`
   display: flex;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   align-items: center;
-  z-index: 50;
+  z-index: 2000;
 
   #filter-icon {
     margin: 0;

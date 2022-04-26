@@ -7,16 +7,18 @@ interface ButtonProps {
   color?: string;
   backgroundColor?: string;
   margin?: string;
+  padding?: string;
+  borderRadius?: string;
 }
 const ButtonContainer = styled.button<ButtonProps>`
   cursor: pointer;
   box-sizing: border-box;
   height: fit-content;
   width: fit-content;
-  padding: 10px 30px;
+  padding: ${(props) => props.padding || "10px 30px"};
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
-  border-radius: 10px;
+  border-radius: ${(props) => props.borderRadius || "10px"};
   background-color: ${COLORS.WHITE};
   margin: ${(props) => props.margin || "0"};
   border: 2px solid ${(props) => props.color || constButtons[props.tag].color};

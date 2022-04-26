@@ -62,6 +62,8 @@ export function getEndpoint(url: string) {
     return "/api/crimes/statistics/districts";
   if (url.includes("Month%20Distribution"))
     return "/api/crimes/statistics/months/pie";
+  if (url.includes("Year%20Distribution"))
+    return "/api/crimes/statistics/years/line";
   return "";
 }
 
@@ -74,5 +76,6 @@ export function getCardTitle(title: string) {
   if (title === "District Distribution")
     return "Distribution of Crime by Districts";
   if (title === "Month Distribution") return "Distribution of Crime by Months";
+  if (title === "Year Distribution") return "Distribution of Crime by Year";
   return title;
 }

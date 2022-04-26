@@ -152,7 +152,7 @@ function StatisticPage({ data }: Props) {
               key={index}
               onClick={() =>
                 filter.new === element.type
-                  ? setFilter({ ...filter, new: "" })
+                  ? setFilter({ ...filter, new: filter.current })
                   : setFilter({ ...filter, new: element.type })
               }
               className={

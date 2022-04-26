@@ -17,15 +17,15 @@ interface Props {
   autoFit?: boolean;
   marginRatio?: number;
 }
-const Graphs = ({ data, tag, barWidthRatio, seriesField, ...rest }: Props) => {
+const Graphs = ({ data, tag, barWidthRatio, seriesField, color, ...rest }: Props) => {
   function GetGraph(graph: GraphTags) {
     switch (graph) {
       case GraphTags.PIE:
         return <PieChart data={data} {...rest} />;
       case GraphTags.BAR:
-        return <BarPlot data={data} barWidthRatio={barWidthRatio} seriesField={seriesField} {...rest} />;
+        return <BarPlot data={data} barWidthRatio={barWidthRatio} seriesField={seriesField} color={color} {...rest} />;
       case GraphTags.LINE:
-        return <LinePlot data={data} {...rest} />;
+        return <LinePlot data={data} color={color} {...rest} />;
       default:
         return <div>No Graph</div>;
     }

@@ -2,6 +2,7 @@ export enum COLORS {
   CONFIRM = "#2D9CDB",
   CANCEL = "#EB5757",
   WHITE = "#FFFFFF",
+  BACKGROUND = "#FAFAFA",
   GRAY6 = "#F2F2F2",
   BLACK = "#2D3436", // BLACK
 }
@@ -62,4 +63,16 @@ export function getEndpoint(url: string) {
   if (url.includes("Month%20Distribution"))
     return "/api/crimes/statistics/months/pie";
   return "";
+}
+
+export function getCardTitle(title: string) {
+  if (title === "Weekday Distribution")
+    return "Distribution of Crime By Week Days";
+  if (title === "Hour Distribution") return "Trend of crimes over time of day";
+  if (title === "Description Distribution")
+    return "Distribution of Crime by Description";
+  if (title === "District Distribution")
+    return "Distribution of Crime by Districts";
+  if (title === "Month Distribution") return "Distribution of Crime by Months";
+  return title;
 }

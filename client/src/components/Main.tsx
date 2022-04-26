@@ -41,7 +41,7 @@ function Main({ setCurrentRoute, setRouteData }: Props) {
 
   return (
     <>
-      {/* Not pretty, but gets the job done */}
+      {/* TODO: Map UI function to be implemented */}
       <MapContainerJ center={[39.29, -76.61]} zoom={13} id="map">
         <TileLayer url="https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=RfEVsKGPWIYyqvgh3ZtV" />
         <Marker position={[39.29, -76.61]}>

@@ -18,8 +18,8 @@ const DataCardsContainer = styled.section`
 `;
 const MapContainerJ = styled(MapContainer)`
   width: 97%;
-  height: 700px;
-  margin: 20px auto 40px;
+  height: 80vh;
+  margin: 40px auto;
 `;
 interface Props {
   setCurrentRoute: (value: string) => void;

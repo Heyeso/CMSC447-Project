@@ -23,7 +23,7 @@ const MainPageContainer = styled.main`
   height: 100%;
   overflow: auto;
   padding: 15px 10px;
-  padding-top: 70px;
+  padding-top: 90px;
   box-sizing: border-box;
 `;
 
@@ -31,6 +31,7 @@ function App() {
   const [filterBarOpen, setFilterBarOpen] = useState<boolean>(false);
   const [currentRoute, setCurrentRoute] = useState<string>("");
   const [routeData, setRouteData] = useState<QuickViewDM | null>(null);
+  const [onTop, setOnTop] = useState<boolean>(true);
   const location = useLocation();
 
   useEffect(() => {
@@ -49,6 +50,11 @@ function App() {
     }
   }, []);
 
+  const handleScroll = (e: React.UIEvent<HTMLElement>) => {
+    if (e.currentTarget.scrollTop === 0) setOnTop(true);
+    else setOnTop(false);
+  };
+
   return (
     <Container className="App">
       <TopNav
@@ -56,9 +62,10 @@ function App() {
         setFilterBarOpen={setFilterBarOpen}
         setCurrentRoute={setCurrentRoute}
         setRouteData={setRouteData}
+        onTop={onTop}
       />
       {filterBarOpen && <FilterData setFilterBarOpen={setFilterBarOpen} />}
-      <MainPageContainer>
+      <MainPageContainer onScroll={handleScroll}>
         <Routes>
           <Route
             path="/"

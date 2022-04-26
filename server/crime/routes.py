@@ -2,6 +2,7 @@ from json import loads
 from bson.json_util import dumps
 from flask import Flask, abort, jsonify, render_template, request, redirect
 from app import app, db
+import asyncio
 
 # Constants
 WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -56,6 +57,79 @@ def distribution(selection, tag):
 
 
     # Aggregate the command
+    cursor = crime_collection.aggregate(command)
+    
+    # Go through documents
+    all_docs = sorted(list(cursor), key = lambda i:i['_id'][point])
+    item = ""
+    for document in all_docs:
+        # Need to convert nums to weekdays, hours need ":00", nums to months if these are the selection
+        if selection == 'weekdays':
+            item = WEEKDAYS[document["_id"][point] - 1]
+        elif selection == 'hours':
+            item = str(document["_id"][point]) + ':00'
+        elif selection == 'months':
+            item = MONTHS[document["_id"][point] - 1]
+        else:
+            item = str(document["_id"][point])
+    
+        # Check for valid data
+        if (item != "") and (item != "NA"):
+            data.append(
+                {
+                    "type": item.replace("_", " ").title(),
+                    "value": document["count"],
+                }
+            )
+
+    return {"tag": tag, "title": point +  " Distribution", "data": data}, 200
+
+
+
+# New Route for Expand Page filters
+#  TODO: Refactor to work for all statistics type
+@app.route("/api/crimes/statistics/expand/weapons/<type>", methods=["GET"])
+def expand_statistics(selection, type):
+    data = []
+
+    for item in SELECTIONS:
+        if item != "weapons" and item != "dates":
+            result, code = expand_distribution(item, "bar", { "$match": {"Weapon": type} })
+            if code != 200:
+                abort(404)
+            data.append(result)
+            
+    return jsonify(data), 200
+
+#  TODO: Needs refactoring, Improving
+def expand_distribution(selection, tag, filter):
+    # data will hold dictionaries for each data entry
+    data = []
+    # command will hold the query
+    command = []
+    # point will hold the _id call
+    point = ""
+
+    # Bad tags - should throw a 404
+    if tag not in CHARTS:
+        abort(404)
+    # Bad selections - should throw a 404
+    if selection not in SELECTIONS:
+        abort(404)
+
+    # Create commands and title point
+    if selection in PROJECTIONS.keys() and selection != 'dates':
+        command = [filter, {'$project': {selection: {"$" + PROJECTIONS[selection]: "$CrimeDateTime"}}},
+                   {'$group': {"_id": {TITLES[selection]: "$" + GROUPS[selection]}, "count": {'$sum': 1}}}]
+    elif selection == 'dates':
+        command = [filter, {'$project': {"dates": {"$dateToString": {"format": "%Y-%m-%d", "date": "$CrimeDateTime"}}}},
+                   {"$group": {"_id": {"Date": "$dates"}, "count": {"$sum": 1}}}]
+    else:
+        command = [filter, {"$group": {"_id": {TITLES[selection]: "$" + GROUPS[selection]}, "count": {"$sum": 1}}}]
+    point = TITLES[selection]
+
+    # Aggregate the command
+    print(command)
     cursor = crime_collection.aggregate(command)
     
     # Go through documents

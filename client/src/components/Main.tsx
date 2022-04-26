@@ -6,7 +6,6 @@ import { QuickViewDM } from "../utils/models";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
-
 const DataCardView = React.lazy(() => import("../reusable/DataCardView"));
 
 const DataCardsContainer = styled.section`
@@ -18,8 +17,9 @@ const DataCardsContainer = styled.section`
   justify-content: center;
 `;
 const MapContainerJ = styled(MapContainer)`
-  width: 100%;
+  width: 97%;
   height: 700px;
+  margin: 20px auto 40px;
 `;
 interface Props {
   setCurrentRoute: (value: string) => void;

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Buttons from "../reusable/Buttons";
 import FilterBar from "../reusable/FilterBar";
+import { QuickViewDM } from "../utils/models";
 import { ButtonTags, COLORS } from "./../utils/constants";
 
 const NullBackground = styled.div`
@@ -46,21 +47,37 @@ const Footer = styled.footer`
 `;
 interface Props {
   setFilterBarOpen: (value: boolean) => void;
+  setFilters: React.Dispatch<React.SetStateAction<string[]>>;
+  filters: string[];
+  data: QuickViewDM[] | null;
 }
-function FilterData({ setFilterBarOpen }: Props) {
+function FilterData({ setFilterBarOpen, setFilters, filters, data }: Props) {
+  const [currentFilters, setCurrentFilters] = useState<string[]>(filters);
+  useEffect(() => {
+    console.log(currentFilters.join("&"));
+  }, [currentFilters]);
   return (
     <NullBackground>
       <FilterDataContainer>
         <Title>Crime Data Filter</Title>
-        <Content>{/* TODO:Filter Options Here */}</Content>
+        <Content>
+          {data?.map((element, index) => (
+            <FilterBar
+              key={index}
+              title={element.title.replace(" Distribution", "")}
+              options={element.data.map((item) => item.type)}
+              filters={currentFilters}
+              setFilters={setCurrentFilters}
+            />
+          ))}
+        </Content>
         <Footer>
           <Buttons
             tag={ButtonTags.CONFIRM}
             margin="0px 5px"
             onClick={() => {
-              {
-                /* TODO:Apply and Reset Filters on Apply changes */
-              }
+              // filters.join("&")
+              setFilters(currentFilters);
               setFilterBarOpen(false);
             }}
           >
@@ -70,9 +87,6 @@ function FilterData({ setFilterBarOpen }: Props) {
             tag={ButtonTags.CANCEL}
             margin="0px 5px"
             onClick={() => {
-              {
-                /* TODO:Reset Filters on Cancel */
-              }
               setFilterBarOpen(false);
             }}
           >

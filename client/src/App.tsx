@@ -32,6 +32,8 @@ function App() {
   const [currentRoute, setCurrentRoute] = useState<string>("");
   const [routeData, setRouteData] = useState<QuickViewDM | null>(null);
   const [onTop, setOnTop] = useState<boolean>(true);
+  const [data, setData] = useState<QuickViewDM[] | null>(null);
+  const [filters, setFilters] = useState<string[]>([]);
   const location = useLocation();
 
   useEffect(() => {
@@ -49,6 +51,9 @@ function App() {
       );
     }
   }, []);
+  useEffect(() => {
+    console.log(filters.join("&"));
+  }, [filters]);
 
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
     if (e.currentTarget.scrollTop === 0) setOnTop(true);
@@ -64,13 +69,22 @@ function App() {
         setRouteData={setRouteData}
         onTop={onTop}
       />
-      {filterBarOpen && <FilterData setFilterBarOpen={setFilterBarOpen} />}
+      {filterBarOpen && (
+        <FilterData
+          data={data}
+          setFilterBarOpen={setFilterBarOpen}
+          setFilters={setFilters}
+          filters={filters}
+        />
+      )}
       <MainPageContainer onScroll={handleScroll}>
         <Routes>
           <Route
             path="/"
             element={
               <MainPage
+                setData={setData}
+                data={data}
                 setCurrentRoute={setCurrentRoute}
                 setRouteData={setRouteData}
               />

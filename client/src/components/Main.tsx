@@ -1,7 +1,12 @@
 import React, { Suspense, useEffect, useState } from "react";
 import styled from "styled-components";
 import Graphs from "../reusable/Graph";
-import { COLORS, GraphTags, getGraphTag, getCardTitle } from "../utils/constants";
+import {
+  COLORS,
+  GraphTags,
+  getGraphTag,
+  getCardTitle,
+} from "../utils/constants";
 import { QuickViewDM } from "../utils/models";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -24,16 +29,16 @@ const MapContainerJ = styled(MapContainer)`
 interface Props {
   setCurrentRoute: (value: string) => void;
   setRouteData: (value: QuickViewDM) => void;
+  data: QuickViewDM[] | null;
+  setData: (value: QuickViewDM[] | null) => void;
 }
-function Main({ setCurrentRoute, setRouteData }: Props) {
-  const [data, setData] = useState<QuickViewDM[] | null>(null);
+function Main({ setCurrentRoute, setRouteData, data, setData }: Props) {
   const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:5000/api/crimes/statistics")
       .then((response) => response.json())
       .then((res_data) => {
-        console.log(res_data);
         return setData(res_data);
       })
       .catch((err) => console.log(err));
@@ -42,7 +47,12 @@ function Main({ setCurrentRoute, setRouteData }: Props) {
   return (
     <>
       {/* TODO: Map UI function to be implemented */}
-      <MapContainerJ center={[39.29, -76.61]} zoom={13} id="map">
+      <MapContainerJ
+        center={[39.29, -76.61]}
+        zoom={13}
+        id="map"
+        scrollWheelZoom={false}
+      >
         <TileLayer url="https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=RfEVsKGPWIYyqvgh3ZtV" />
         <Marker position={[39.29, -76.61]}>
           <Popup>Sample Marker</Popup>

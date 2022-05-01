@@ -1,6 +1,4 @@
-from json import loads
-from bson.json_util import dumps
-from flask import Flask, abort, jsonify, render_template, request, redirect
+from flask import abort, jsonify, request
 from app import app, db
 
 # Constants
@@ -15,7 +13,7 @@ GROUPS = {'weapons': 'Weapon', 'weekdays': 'weekdays', 'hours': 'hours', 'dates'
 PROJECTIONS = {'weekdays': 'dayOfWeek', 'hours': 'hour', 'dates': 'dateToString', 'months': 'month', 'years': 'year'}
 
 # crime and crime stats tables
-crime_collection = db["crime"]
+crimes_collection = db["crimes"]
 crime_statistics_collection = db["crime_statistics"]
 
 # GET requests
@@ -56,7 +54,7 @@ def distribution(selection, tag):
 
 
     # Aggregate the command
-    cursor = crime_collection.aggregate(command)
+    cursor = crimes_collection.aggregate(command)
     
     # Go through documents
     all_docs = sorted(list(cursor), key = lambda i:i['_id'][point])
@@ -82,3 +80,81 @@ def distribution(selection, tag):
             )
 
     return {"tag": tag, "title": point +  " Distribution", "data": data}, 200
+
+# GET requests
+# Returns a list of all the crimes according to filter.
+@app.route("/api/crimes/map/filters", methods=["GET"])
+def map():
+
+    size =  request.args.get("n")
+    if size == None or not size.isnumeric():
+        size = 1000
+    else:
+        size = int(size)
+        if size > 1000:
+            size = 1000
+
+    weapon = request.args.get('Weapons')
+    description = request.args.get('Description')
+    district = request.args.get('District')
+    weekday = request.args.get('Weekday')
+    hour = request.args.get('Hour')
+    month = request.args.get('Month')
+    year = request.args.get('Year')
+    #TODO: dates = request.args.get('Date')
+
+    req = [
+        {
+            "$project": {
+                "CrimeCode": "$CrimeCode",
+                "Description": "$Description",
+                "District": "$District",
+                "GeoLocation": {
+                    "Latitude": "$Latitude",
+                    "Longitude": "$Longitude",
+                },
+                "Inside_Outside": "$Inside_Outside",
+                "Location": "$Location",
+                "Neighborhood": "$Neighborhood",
+                "Post": "$Post",
+                "Premise": "$Premise",
+                "RowID": "$RowID",
+                "Shape": "$Shape",
+                "Total_Incidents": "$Total_Incidents",
+                "VRIName": "$VRIName",
+                "Weapon": "$Weapon",
+                "_id": 0,
+                "Date": "$CrimeDateTime",
+                "CrimeDate": {
+                    "year": { "$year": "$CrimeDateTime" },
+                    "month": { "$month": "$CrimeDateTime" },
+                    "hour": { "$hour": "$CrimeDateTime" },
+                    "dayOfWeek": { "$dayOfWeek": "$CrimeDateTime" }
+                },
+
+            }
+        },
+        {"$limit": size},
+    ]
+    match = {}
+    # {$where : 'return this.date.getMonth() == 11'}
+    if weapon != None:
+        match["Weapon"] = weapon.upper().replace(" ", "_")
+    if description != None:
+        match["Description"] = description.upper()
+    if district != None:
+        match["District"] = district.upper()
+    if weekday != None:
+        match["CrimeDate.dayOfWeek"] =  WEEKDAYS.index(weekday) + 1
+    if hour != None:
+        match["CrimeDate.hour"] =  int(hour.split(":")[0])
+    if month != None:
+        match["CrimeDate.month"] =  MONTHS.index(month) + 1
+    if year != None:
+        match["CrimeDate.year"] =  year
+
+    req.insert(1, {"$match": match})
+    print(req)
+    cursor = crimes_collection.aggregate(req)
+
+    return jsonify(list(cursor)), 200

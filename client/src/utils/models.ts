@@ -22,7 +22,7 @@ export interface MapDataVM {
   Description: string;
   District: string;
   GeoLocation: {
-    Lattitude: number;
+    Latitude: number;
     Longitude: number;
   }
   Inside_Outside: string;

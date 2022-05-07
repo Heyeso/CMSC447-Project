@@ -33,7 +33,6 @@ function App() {
   const [routeData, setRouteData] = useState<QuickViewDM | null>(null);
   const [onTop, setOnTop] = useState<boolean>(true);
   const [data, setData] = useState<QuickViewDM[] | null>(null);
-  const [mapData, setMapData] = useState<MapDataVM[] | null>(null);
   const [filters, setFilters] = useState<string[]>([]);
   const location = useLocation();
 
@@ -52,9 +51,6 @@ function App() {
       );
     }
   }, []);
-  useEffect(() => {
-    console.log(filters.join("&"));
-  }, [filters]);
 
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
     if (e.currentTarget.scrollTop === 0) setOnTop(true);
@@ -86,8 +82,7 @@ function App() {
               <MainPage
                 setData={setData}
                 data={data}
-                setMapData={setMapData}
-                mapData={mapData}
+                filters={filters}
                 setCurrentRoute={setCurrentRoute}
                 setRouteData={setRouteData}
               />

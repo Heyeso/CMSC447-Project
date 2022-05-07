@@ -21,6 +21,9 @@ const DataCardsContainer = styled.section`
   flex-wrap: wrap;
   justify-content: center;
 `;
+const MapPopupContainer = styled(Popup)`
+  height: fit-content;
+`
 const MapContainerJ = styled(MapContainer)`
   width: 97%;
   height: 80vh;
@@ -31,11 +34,14 @@ interface Props {
   setRouteData: (value: QuickViewDM) => void;
   data: QuickViewDM[] | null;
   setData: (value: QuickViewDM[] | null) => void;
-  mapData: MapDataVM[] | null;
-  setMapData: (value: MapDataVM[] | null) => void;
+  filters: string[];
+  // mapData: MapDataVM[] | null;
+  // setMapData: (value: MapDataVM[] | null) => void;
 }
-function Main({ setCurrentRoute, setRouteData, data, setData, mapData, setMapData }: Props) {
+function Main({ setCurrentRoute, setRouteData, data, setData, filters }: Props) {
   const navigate = useNavigate();
+
+  const [mapData, setMapData] = useState<MapDataVM[] | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/crimes/statistics")
@@ -44,12 +50,24 @@ function Main({ setCurrentRoute, setRouteData, data, setData, mapData, setMapDat
         return setData(res_data);
       })
       .catch((err) => console.log(err));
-    fetch("http://localhose:5000/api/crimes/map/filters")
-      .then((response) => response.json())
+    fetch(`http://localhost:5000/api/crimes/map/filters?n=100&${filters.join("&")}`)
+      .then((response) => {
+        return response.json();
+      })
       .then((res_data) => {
         return setMapData(res_data);
       })
   }, []);
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/crimes/map/filters?n=100&${filters.join("&")}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((res_data) => {
+        return setMapData(res_data);
+      })
+  }, [filters])
 
   return (
     <>
@@ -60,12 +78,19 @@ function Main({ setCurrentRoute, setRouteData, data, setData, mapData, setMapDat
         scrollWheelZoom={false}
       >
         <TileLayer url="https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=RfEVsKGPWIYyqvgh3ZtV" />
-        <Marker position={[39.29, -76.61]}>
-          <Popup>Sample Marker</Popup>
-        </Marker>
+        
         {mapData &&
           mapData.map((element, index) => (
-            <Marker position={[element.GeoLocation.Lattitude, element.GeoLocation.Longitude]}></Marker>
+            <Marker 
+              key={index}
+              position={[element.GeoLocation.Latitude, element.GeoLocation.Longitude]}
+            >
+              <MapPopupContainer>
+                {element.Description}
+                <p>{element.Weapon.toLowerCase()}</p>
+                <p>{element.Date}</p>
+              </MapPopupContainer>
+            </Marker>
         ))}
       </MapContainerJ>
 

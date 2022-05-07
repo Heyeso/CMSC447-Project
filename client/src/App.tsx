@@ -6,7 +6,7 @@ import TopNav from "./components/TopNavigation";
 import { COLORS, getEndpoint } from "./utils/constants";
 import MainPage from "./components/Main";
 import StatisticPage from "./components/pages/StatisticPage";
-import { QuickViewDM } from "./utils/models";
+import { QuickViewDM, MapDataVM } from "./utils/models";
 
 const Container = styled.div`
   position: relative;
@@ -33,6 +33,7 @@ function App() {
   const [routeData, setRouteData] = useState<QuickViewDM | null>(null);
   const [onTop, setOnTop] = useState<boolean>(true);
   const [data, setData] = useState<QuickViewDM[] | null>(null);
+  const [mapData, setMapData] = useState<MapDataVM[] | null>(null);
   const [filters, setFilters] = useState<string[]>([]);
   const location = useLocation();
 
@@ -85,6 +86,8 @@ function App() {
               <MainPage
                 setData={setData}
                 data={data}
+                setMapData={setMapData}
+                mapData={mapData}
                 setCurrentRoute={setCurrentRoute}
                 setRouteData={setRouteData}
               />

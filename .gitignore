@@ -22,3 +22,5 @@ venv*
 
 production.txt
 server/.env
+server/__pycache__
+server/crime/__pycache__

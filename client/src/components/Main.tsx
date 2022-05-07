@@ -7,7 +7,7 @@ import {
   getGraphTag,
   getCardTitle,
 } from "../utils/constants";
-import { QuickViewDM } from "../utils/models";
+import { QuickViewDM, MapDataVM } from "../utils/models";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
@@ -31,8 +31,10 @@ interface Props {
   setRouteData: (value: QuickViewDM) => void;
   data: QuickViewDM[] | null;
   setData: (value: QuickViewDM[] | null) => void;
+  mapData: MapDataVM[] | null;
+  setMapData: (value: MapDataVM[] | null) => void;
 }
-function Main({ setCurrentRoute, setRouteData, data, setData }: Props) {
+function Main({ setCurrentRoute, setRouteData, data, setData, mapData, setMapData }: Props) {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,14 +44,18 @@ function Main({ setCurrentRoute, setRouteData, data, setData }: Props) {
         return setData(res_data);
       })
       .catch((err) => console.log(err));
+    fetch("http://localhose:5000/api/crimes/map/filters")
+      .then((response) => response.json())
+      .then((res_data) => {
+        return setMapData(res_data);
+      })
   }, []);
 
   return (
     <>
-      {/* TODO: Map UI function to be implemented */}
       <MapContainerJ
         center={[39.29, -76.61]}
-        zoom={13}
+        zoom={11.5}
         id="map"
         scrollWheelZoom={false}
       >
@@ -57,6 +63,10 @@ function Main({ setCurrentRoute, setRouteData, data, setData }: Props) {
         <Marker position={[39.29, -76.61]}>
           <Popup>Sample Marker</Popup>
         </Marker>
+        {mapData &&
+          mapData.map((element, index) => (
+            <Marker position={[element.GeoLocation.Lattitude, element.GeoLocation.Longitude]}></Marker>
+        ))}
       </MapContainerJ>
 
       <DataCardsContainer>

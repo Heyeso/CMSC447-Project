@@ -235,7 +235,7 @@ def map():
     if month != None:
         match["CrimeDate.month"] =  MONTHS.index(month) + 1
     if year != None:
-        match["CrimeDate.year"] =  year
+        match["CrimeDate.year"] =  int(year)
 
     req.insert(1, {"$match": match})
     print(req)

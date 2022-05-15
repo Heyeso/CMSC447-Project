@@ -33,6 +33,7 @@
    pip install pymongo
    pip install python-dotenv
    python -m pip install pymongo[srv]
+   pip install asyncio
    ```
 
 ### Run (windows)

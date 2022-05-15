@@ -1,8 +1,13 @@
 import React, { Suspense, useEffect, useState } from "react";
 import styled from "styled-components";
 import Graphs from "../reusable/Graph";
-import { COLORS, GraphTags, getGraphTag, getCardTitle } from "../utils/constants";
-import { QuickViewDM } from "../utils/models";
+import {
+  COLORS,
+  GraphTags,
+  getGraphTag,
+  getCardTitle,
+} from "../utils/constants";
+import { QuickViewDM, MapDataVM } from "../utils/models";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
@@ -16,6 +21,9 @@ const DataCardsContainer = styled.section`
   flex-wrap: wrap;
   justify-content: center;
 `;
+const MapPopupContainer = styled(Popup)`
+  height: fit-content;
+`
 const MapContainerJ = styled(MapContainer)`
   width: 97%;
   height: 80vh;
@@ -24,29 +32,66 @@ const MapContainerJ = styled(MapContainer)`
 interface Props {
   setCurrentRoute: (value: string) => void;
   setRouteData: (value: QuickViewDM) => void;
+  data: QuickViewDM[] | null;
+  setData: (value: QuickViewDM[] | null) => void;
+  filters: string[];
+  // mapData: MapDataVM[] | null;
+  // setMapData: (value: MapDataVM[] | null) => void;
 }
-function Main({ setCurrentRoute, setRouteData }: Props) {
-  const [data, setData] = useState<QuickViewDM[] | null>(null);
+function Main({ setCurrentRoute, setRouteData, data, setData, filters }: Props) {
   const navigate = useNavigate();
+
+  const [mapData, setMapData] = useState<MapDataVM[] | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/crimes/statistics")
       .then((response) => response.json())
       .then((res_data) => {
-        console.log(res_data);
         return setData(res_data);
       })
       .catch((err) => console.log(err));
+    fetch(`http://localhost:5000/api/crimes/map/filters?n=100&${filters.join("&")}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((res_data) => {
+        return setMapData(res_data);
+      })
   }, []);
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/crimes/map/filters?n=100&${filters.join("&")}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((res_data) => {
+        return setMapData(res_data);
+      })
+  }, [filters])
 
   return (
     <>
-      {/* TODO: Map UI function to be implemented */}
-      <MapContainerJ center={[39.29, -76.61]} zoom={13} id="map">
+      <MapContainerJ
+        center={[39.29, -76.61]}
+        zoom={11.5}
+        id="map"
+        scrollWheelZoom={false}
+      >
         <TileLayer url="https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=RfEVsKGPWIYyqvgh3ZtV" />
-        <Marker position={[39.29, -76.61]}>
-          <Popup>Sample Marker</Popup>
-        </Marker>
+        
+        {mapData &&
+          mapData.map((element, index) => (
+            <Marker 
+              key={index}
+              position={[element.GeoLocation.Latitude, element.GeoLocation.Longitude]}
+            >
+              <MapPopupContainer>
+                {element.Description}
+                <p>{element.Weapon.toLowerCase()}</p>
+                <p>{element.Date}</p>
+              </MapPopupContainer>
+            </Marker>
+        ))}
       </MapContainerJ>
 
       <DataCardsContainer>

@@ -7,7 +7,7 @@ import {
   getGraphTag,
   getCardTitle,
 } from "../utils/constants";
-import { QuickViewDM } from "../utils/models";
+import { QuickViewDM, MapDataVM } from "../utils/models";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
@@ -21,6 +21,9 @@ const DataCardsContainer = styled.section`
   flex-wrap: wrap;
   justify-content: center;
 `;
+const MapPopupContainer = styled(Popup)`
+  height: fit-content;
+`
 const MapContainerJ = styled(MapContainer)`
   width: 97%;
   height: 80vh;
@@ -31,9 +34,14 @@ interface Props {
   setRouteData: (value: QuickViewDM) => void;
   data: QuickViewDM[] | null;
   setData: (value: QuickViewDM[] | null) => void;
+  filters: string[];
+  // mapData: MapDataVM[] | null;
+  // setMapData: (value: MapDataVM[] | null) => void;
 }
-function Main({ setCurrentRoute, setRouteData, data, setData }: Props) {
+function Main({ setCurrentRoute, setRouteData, data, setData, filters }: Props) {
   const navigate = useNavigate();
+
+  const [mapData, setMapData] = useState<MapDataVM[] | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/crimes/statistics")
@@ -42,21 +50,48 @@ function Main({ setCurrentRoute, setRouteData, data, setData }: Props) {
         return setData(res_data);
       })
       .catch((err) => console.log(err));
+    fetch(`http://localhost:5000/api/crimes/map/filters?n=100&${filters.join("&")}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((res_data) => {
+        return setMapData(res_data);
+      })
   }, []);
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/crimes/map/filters?n=100&${filters.join("&")}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((res_data) => {
+        return setMapData(res_data);
+      })
+  }, [filters])
 
   return (
     <>
-      {/* TODO: Map UI function to be implemented */}
       <MapContainerJ
         center={[39.29, -76.61]}
-        zoom={13}
+        zoom={11.5}
         id="map"
         scrollWheelZoom={false}
       >
         <TileLayer url="https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=RfEVsKGPWIYyqvgh3ZtV" />
-        <Marker position={[39.29, -76.61]}>
-          <Popup>Sample Marker</Popup>
-        </Marker>
+        
+        {mapData &&
+          mapData.map((element, index) => (
+            <Marker 
+              key={index}
+              position={[element.GeoLocation.Latitude, element.GeoLocation.Longitude]}
+            >
+              <MapPopupContainer>
+                {element.Description}
+                <p>{element.Weapon.toLowerCase()}</p>
+                <p>{element.Date}</p>
+              </MapPopupContainer>
+            </Marker>
+        ))}
       </MapContainerJ>
 
       <DataCardsContainer>

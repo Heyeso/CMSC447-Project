@@ -6,7 +6,7 @@ import TopNav from "./components/TopNavigation";
 import { COLORS, getEndpoint } from "./utils/constants";
 import MainPage from "./components/Main";
 import StatisticPage from "./components/pages/StatisticPage";
-import { QuickViewDM } from "./utils/models";
+import { QuickViewDM, MapDataVM } from "./utils/models";
 
 const Container = styled.div`
   position: relative;
@@ -51,9 +51,6 @@ function App() {
       );
     }
   }, []);
-  useEffect(() => {
-    console.log(filters.join("&"));
-  }, [filters]);
 
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
     if (e.currentTarget.scrollTop === 0) setOnTop(true);
@@ -85,6 +82,7 @@ function App() {
               <MainPage
                 setData={setData}
                 data={data}
+                filters={filters}
                 setCurrentRoute={setCurrentRoute}
                 setRouteData={setRouteData}
               />

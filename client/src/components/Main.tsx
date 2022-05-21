@@ -125,6 +125,61 @@ const MapContainerJ = styled(MapContainer)`
     }
   }
 `;
+const CardLoadingAnim = keyframes`
+  0% {
+    background-color: ${COLORS.GRAY6};
+  }
+  50% {
+    background-color: #e0e0e0;
+  }
+  100% {
+    background-color: ${COLORS.GRAY6};
+  }
+`;
+const CardLoadingAnim2 = keyframes`
+  0% {
+    background-color: #e7e7e7;
+  }
+  50% {
+    background-color: #d3d3d3;
+  }
+  100% {
+    background-color: #e7e7e7;
+  }
+`;
+const CardLoading = styled.article`
+  background-color: ${COLORS.WHITE};
+  width: 500px;
+  height: 400px;
+  margin: 15px 20px;
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+  border-radius: 0.5px solid ${COLORS.GRAY6};
+  color: ${COLORS.BLACK};
+  position: relative;
+  ::before {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    right: 20px;
+    height: 40px;
+    border-radius: 10px;
+    z-index: 10;
+    animation: ${CardLoadingAnim2} 1.5s linear infinite;
+  }
+  ::after {
+    content: "";
+    position: absolute;
+    top: 75px;
+    left: 20px;
+    right: 20px;
+    bottom: 15px;
+    border-radius: 10px;
+    z-index: 10;
+    animation: ${CardLoadingAnim2} 1.5s ease-in-out infinite;
+  }
+  animation: ${CardLoadingAnim} 1.5s ease-in-out infinite;
+`;
 
 interface Props {
   setCurrentRoute: (value: string) => void;
@@ -188,8 +243,7 @@ function Main({
         id="map"
         scrollWheelZoom={false}
       >
-        <div className={isMapLoading ? "loading" : ""}>
-        </div>
+        <div className={isMapLoading ? "loading" : ""}></div>
         <TileLayer url="https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=RfEVsKGPWIYyqvgh3ZtV" />
 
         {mapData &&
@@ -239,7 +293,7 @@ function Main({
       <DataCardsContainer>
         {data &&
           data.map((element, index) => (
-            <Suspense fallback={<div>loading</div>} key={index}>
+            <Suspense fallback={<CardLoading />} key={index}>
               <DataCardView
                 key={index}
                 title={getCardTitle(element.title)}
@@ -259,6 +313,10 @@ function Main({
                 />
               </DataCardView>
             </Suspense>
+          ))}
+        {(data?.length === 0 || data === null) &&
+          ["", "", "", "", "", ""].map((el, index) => (
+            <CardLoading key={index} />
           ))}
       </DataCardsContainer>
     </>

@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Graphs from "../reusable/Graph";
 import {
   COLORS,
@@ -86,11 +86,46 @@ const MapPopupContainer = styled(Popup)`
     }
   }
 `;
+const Loading = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`;
 const MapContainerJ = styled(MapContainer)`
   width: 97%;
   height: 80vh;
   margin: 40px auto;
+  position: relative;
+  .loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    background-color: #8d8d8d49;
+    width: 100%;
+    height: 100%;
+    font-size: 30px;
+    ::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -30px;
+      margin-left: -30px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50px;
+      border: 5px solid grey;
+      border-top-color: black;
+      z-index: 2001;
+      animation: ${Loading} 2s linear infinite;
+    }
+  }
 `;
+
 interface Props {
   setCurrentRoute: (value: string) => void;
   setRouteData: (value: QuickViewDM) => void;
@@ -110,6 +145,7 @@ function Main({
   const navigate = useNavigate();
 
   const [mapData, setMapData] = useState<MapDataVM[] | null>(null);
+  const [isMapLoading, setIsMapLoading] = useState<boolean>(true);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/crimes/statistics")
@@ -118,18 +154,19 @@ function Main({
         return setData(res_data);
       })
       .catch((err) => console.log(err));
-    fetch(
-      `http://localhost:5000/api/crimes/map/filters?n=100&${filters.join("&")}`
-    )
+    fetch(`http://localhost:5000/api/crimes/map/filters?n=100&`)
       .then((response) => {
         return response.json();
       })
       .then((res_data) => {
-        return setMapData(res_data);
-      });
+        setMapData(res_data);
+        setIsMapLoading(false);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
+    setIsMapLoading(true);
     fetch(
       `http://localhost:5000/api/crimes/map/filters?n=100&${filters.join("&")}`
     )
@@ -137,18 +174,22 @@ function Main({
         return response.json();
       })
       .then((res_data) => {
-        return setMapData(res_data);
-      });
+        setMapData(res_data);
+        setIsMapLoading(false);
+      })
+      .catch((err) => console.log(err));
   }, [filters]);
 
   return (
     <>
       <MapContainerJ
         center={[39.29, -76.61]}
-        zoom={11.5}
+        zoom={12.2}
         id="map"
         scrollWheelZoom={false}
       >
+        <div className={isMapLoading ? "loading" : ""}>
+        </div>
         <TileLayer url="https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=RfEVsKGPWIYyqvgh3ZtV" />
 
         {mapData &&

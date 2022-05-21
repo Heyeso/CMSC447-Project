@@ -214,8 +214,8 @@ const LoadingContainer = styled.div`
     width: 50px;
     height: 50px;
     border-radius: 50px;
-    border: 5px solid grey;
-    border-top-color: black;
+    border: 5px solid ${COLORS.WHITE};
+    border-top-color: ${COLORS.CONFIRM};
     z-index: 2001;
     animation: ${LoadingAnim} 2s linear infinite;
   }

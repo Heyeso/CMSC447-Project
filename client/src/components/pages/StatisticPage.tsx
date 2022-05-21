@@ -1,5 +1,5 @@
-import React, { Suspense, useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { Suspense, useState } from "react";
+import styled, { keyframes } from "styled-components";
 import Buttons from "../../reusable/Buttons";
 import {
   ButtonTags,
@@ -25,6 +25,7 @@ const GraphContainer = styled.div`
   padding: 15px;
   width: 90vw;
   height: 600px;
+  position: relative;
 `;
 const Title = styled.header`
   font-weight: 600;
@@ -111,7 +112,7 @@ function StatisticPage({ data }: Props) {
     <Container>
       <Title>
         <span></span>
-        {getCardTitle(data ? data.title : "")}
+        {data ? getCardTitle(data.title) : "Loading..."}
       </Title>
       <GraphContainer>
         {data && (
@@ -127,6 +128,7 @@ function StatisticPage({ data }: Props) {
             )}
           </Suspense>
         )}
+        {data ? "" : <Loading />}
       </GraphContainer>
       <SubTitle>
         <span></span>
@@ -174,8 +176,51 @@ function StatisticPage({ data }: Props) {
 
 export default StatisticPage;
 
-const LoadingContainer = styled.div``;
+const LoadingAnim = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`;
+const CardLoadingAnim = keyframes`
+  0% {
+    background-color: ${COLORS.GRAY6};
+  }
+  50% {
+    background-color: #e0e0e0;
+  }
+  100% {
+    background-color: ${COLORS.GRAY6};
+  }
+`;
+const LoadingContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  animation: ${CardLoadingAnim} 1.5s ease-in-out infinite;
+  width: 100%;
+  height: 100%;
+  font-size: 30px;
+  ::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -30px;
+    margin-left: -30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    border: 5px solid grey;
+    border-top-color: black;
+    z-index: 2001;
+    animation: ${LoadingAnim} 2s linear infinite;
+  }
+`;
 
 const Loading = () => {
-  return <LoadingContainer>loading</LoadingContainer>;
+  return <LoadingContainer />;
 };

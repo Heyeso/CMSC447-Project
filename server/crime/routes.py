@@ -154,7 +154,6 @@ def map():
         match["CrimeDate.year"] =  int(year)
 
     req.insert(1, {"$match": match})
-    print(req)
     cursor = crimes_collection.aggregate(req)
 
     return jsonify(list(cursor)), 200

@@ -83,18 +83,19 @@ def distribution(selection, tag, match_type=None):
                     command = [{'$project': {GROUPS[all_selections]: 1}}] + command
     
     # Handle if there is a filter (Need type to be an int if date value)
-    for pair in range(0, len(match_type), 2):
-        if match_type[pair] in PROJECTIONS.keys():
-            match_type[pair + 1] = int(match_type[pair + 1])
-        # First match just needs a match
-        if pair == 0:
-            command = [command[0]] + [{'$match': {GROUPS[match_type[pair]]: match_type[pair + 1]}}] + [command[1]]
-        # Second match must have a match with an and
-        elif pair == 2:
-            command[1] = {'$match': {'$and': [{GROUPS[match_type[0]]: match_type[1]}, {GROUPS[match_type[pair]]: match_type[pair + 1]}]}}
-        # Third or more matces must apend to the and
-        else:
-            command[1]['$match']['$and'].append({GROUPS[match_type[pair]]: match_type[pair + 1]})
+    if match_type:
+        for pair in range(0, len(match_type), 2):
+            if match_type[pair] in PROJECTIONS.keys():
+                match_type[pair + 1] = int(match_type[pair + 1])
+            # First match just needs a match
+            if pair == 0:
+                command = [command[0]] + [{'$match': {GROUPS[match_type[pair]]: match_type[pair + 1]}}] + [command[1]]
+            # Second match must have a match with an and
+            elif pair == 2:
+                command[1] = {'$match': {'$and': [{GROUPS[match_type[0]]: match_type[1]}, {GROUPS[match_type[pair]]: match_type[pair + 1]}]}}
+            # Third or more matces must apend to the and
+            else:
+                command[1]['$match']['$and'].append({GROUPS[match_type[pair]]: match_type[pair + 1]})
 
     # Aggregate the command
     cursor = crimes_collection.aggregate(command)
